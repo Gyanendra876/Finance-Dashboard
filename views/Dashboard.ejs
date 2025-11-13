@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>💸 Finance Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background: linear-gradient(135deg, #f9fafb, #eef2ff);
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Scrollable sections */
+    .custom-scroll {
+      max-height: 260px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #6366f1 transparent;
+    }
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background-color: rgba(99,102,241,0.5); border-radius: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background-color: rgba(79,70,229,0.8); }
+  </style>
+</head>
+<body class="min-h-screen text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center sticky top-0 z-50">
+    <h1 class="text-2xl font-bold text-indigo-600">💸 Finance Dashboard</h1>
+    
+    <!-- Desktop Menu -->
+    <ul class="hidden md:flex space-x-6 text-gray-700 font-medium">
+      <li><a href="/dashboard" class="text-indigo-600 font-semibold border-b-2 border-indigo-600">Dashboard</a></li>
+      <li><a href="/transaction" class="hover:text-indigo-600">Transactions</a></li>
+      <li><a href="/reports" class="hover:text-indigo-600">Reports</a></li>
+      <li><a href="/auth/logout" class="text-red-500 hover:text-red-600">Logout</a></li>
+    </ul>
+
+    <!-- Mobile Hamburger -->
+    <div class="md:hidden flex items-center">
+      <button id="menu-btn" class="text-gray-700 focus:outline-none">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" 
+             viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Mobile Sidebar Menu -->
+  <div id="mobile-menu" class="fixed top-0 left-0 h-full w-64 bg-white shadow-lg transform -translate-x-full transition-transform z-50">
+    <div class="p-6">
+      <h2 class="text-2xl font-bold text-indigo-600 mb-6">💸 Menu</h2>
+      <ul class="space-y-4 text-gray-700 font-medium">
+        <li><a href="/dashboard" class="hover:text-indigo-600">Dashboard</a></li>
+        <li><a href="transaction" class="hover:text-indigo-600">Transactions</a></li>
+        <li><a href="/reports" class="hover:text-indigo-600">Reports</a></li>
+        <li><a href="/auth/logout" class="text-red-500 hover:text-red-600">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Overlay -->
+  <div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden z-40"></div>
+
+  <main class="p-6 md:p-8 space-y-8 max-w-7xl mx-auto">
+
+    <!-- Top Summary Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <% const cards = [
+        { label: 'Total Income', value: totalIncome, color: 'text-green-600' },
+        { label: 'Total Expense', value: totalExpense, color: 'text-red-600' },
+        { label: 'Net Savings', value: balance, color: 'text-blue-600' },
+        { label: 'Transactions', value: transactions.length, color: 'text-gray-800' }
+      ]; %>
+      <% cards.forEach(c => { %>
+        <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 text-center">
+          <h3 class="text-gray-500 text-sm font-medium"><%= c.label %></h3>
+          <p class="text-2xl font-bold <%= c.color %> mt-2">
+            <%= c.label === 'Transactions' ? c.value : '₹' + c.value.toLocaleString() %>
+          </p>
+        </div>
+      <% }) %>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">📅 Weekly Spending</h2>
+        <canvas id="weeklySpendingChart" height="140"></canvas>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">💰 Savings Forecast</h2>
+        <canvas id="savingsForecastChart" height="140"></canvas>
+      </div>
+    </section>
+
+    <!-- Alerts & Motivation -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-yellow-50 p-6 rounded-2xl shadow-md border border-yellow-200">
+        <h3 class="font-semibold text-lg mb-2 text-yellow-700">⚠️ Smart Alerts</h3>
+        <ul class="list-disc list-inside space-y-1 text-gray-700">
+          <% if (alerts.length > 0) { %>
+            <% alerts.forEach(a => { %>
+              <li><%= a %></li>
+            <% }) %>
+          <% } else { %>
+            <li>✅ All good! No financial alerts at the moment.</li>
+          <% } %>
+        </ul>
+      </div>
+      <div class="bg-indigo-50 p-6 rounded-2xl shadow-md border border-indigo-200">
+        <h3 class="font-semibold text-lg mb-2 text-indigo-700">💡 Daily Motivation</h3>
+        <p class="text-gray-800 italic">“<%= quote.text %>”</p>
+        <p class="text-sm text-gray-500 mt-2">– <%= quote.author %></p>
+      </div>
+    </section>
+
+    <!-- Goals -->
+    <section class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+      <h2 class="text-lg font-semibold mb-4 text-gray-800">🎯 Financial Goals</h2>
+      <form action="/dashboard/add-goal" method="POST" class="flex flex-wrap gap-3 mb-4">
+        <input type="text" name="title" placeholder="Goal (e.g. Buy Laptop)"
+               class="border border-gray-300 rounded-lg px-3 py-2 flex-1 focus:ring-2 focus:ring-indigo-300" required>
+        <input type="number" name="targetAmount" placeholder="Target (₹)"
+               class="border border-gray-300 rounded-lg px-3 py-2 w-32 focus:ring-2 focus:ring-indigo-300" required>
+        <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">➕ Add</button>
+      </form>
+
+      <div class="custom-scroll">
+        <% if (goals.length > 0) { %>
+          <ul class="space-y-3">
+            <% goals.forEach(g => { %>
+              <li>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-medium text-gray-700"><%= g.title %></span>
+                  <span class="text-gray-600"><%= g.progress ? g.progress.toFixed(0) : 0 %>%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                  <div class="h-3 bg-green-500 rounded-full" style="width: <%= g.progress ? g.progress : 0 %>%"></div>
+                </div>
+              </li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p class="text-gray-500 text-sm">No goals yet — add one above!</p>
+        <% } %>
+      </div>
+    </section>
+
+    <!-- Bills & Recent Transactions -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <!-- Bills -->
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition flex flex-col">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">🧾 Upcoming Bills & Due Dates</h2>
+        <form action="/bills/add" method="POST" class="flex flex-wrap gap-3 mb-4">
+          <input type="text" name="title" placeholder="Bill name (e.g. Rent)"
+                 class="border border-gray-300 rounded-lg px-3 py-2 flex-1 focus:ring-2 focus:ring-indigo-300" required>
+          <input type="number" name="amount" placeholder="Amount (₹)"
+                 class="border border-gray-300 rounded-lg px-3 py-2 w-32 focus:ring-2 focus:ring-indigo-300" required>
+          <input type="date" name="dueDate"
+                 class="border border-gray-300 rounded-lg px-3 py-2 w-40 focus:ring-2 focus:ring-indigo-300" required>
+          <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700">➕ Add</button>
+        </form>
+
+        <div class="flex-1 max-h-72 overflow-y-auto pr-2 custom-scroll">
+          <ul class="divide-y divide-gray-200">
+            <% if (upcomingBills.length === 0) { %>
+              <p class="text-gray-500 text-sm">No upcoming bills yet — add one above!</p>
+            <% } else { %>
+              <% upcomingBills.forEach(bill => { %>
+                <li class="flex justify-between items-center py-3">
+                  <div>
+                    <p class="font-medium text-gray-800"><%= bill.title %></p>
+                    <p class="text-sm text-gray-500">Due: <%= new Date(bill.dueDate).toLocaleDateString() %></p>
+                  </div>
+                  <div class="flex items-center gap-3">
+                    <span class="font-semibold text-indigo-600">₹<%= bill.amount %></span>
+                    <form action="/bills/delete/<%= bill._id %>" method="POST">
+                      <button type="submit" class="text-red-500 hover:text-red-600 transition">🗑️</button>
+                    </form>
+                  </div>
+                </li>
+              <% }) %>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Transactions -->
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">📅 Recent Transactions</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white rounded-lg">
+            <thead class="bg-gray-100 text-gray-700">
+              <tr>
+                <th class="py-3 px-4 text-left">Date</th>
+                <th class="py-3 px-4 text-left">Type</th>
+                <th class="py-3 px-4 text-left">Category</th>
+                <th class="py-3 px-4 text-left">Amount</th>
+                <th class="py-3 px-4 text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% transactions.forEach(t => { %>
+                <tr class="border-b hover:bg-gray-50 transition">
+                  <td class="py-2 px-4"><%= new Date(t.date).toLocaleDateString() %></td>
+                  <td class="py-2 px-4 capitalize <%= t.type === 'income' ? 'text-green-600' : 'text-red-600' %>"><%= t.type %></td>
+                  <td class="py-2 px-4"><%= t.category %></td>
+                  <td class="py-2 px-4 font-medium <%= t.type === 'income' ? 'text-green-600' : 'text-red-600' %>">₹<%= t.amount %></td>
+                  <td class="py-2 px-4 text-center">
+                    <div class="flex justify-center items-center gap-2">
+                      <a href="/transactions/edit/<%= t._id %>" class="p-2 rounded-lg border border-gray-300 text-blue-600 hover:bg-blue-50">✏️</a>
+                      <form action="/transactions/delete/<%= t._id %>" method="POST">
+                        <button type="submit" class="p-2 rounded-lg border border-gray-300 text-red-600 hover:bg-red-50">🗑️</button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Charts Script -->
+ <script>
+const ctx1 = document.getElementById('weeklySpendingChart');
+if (ctx1) {
+  new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+      datasets: [{
+        label:'Expenses (₹)',
+        data: <%- JSON.stringify(weeklyData) %>,
+        backgroundColor:'rgba(99,102,241,0.8)',
+        borderRadius:6
+      }]
+    },
+    options: { scales: { y: { beginAtZero:true } } }
+  });
+}
+
+const ctx2 = document.getElementById('savingsForecastChart');
+if (ctx2) {
+  new Chart(ctx2, {
+    type:'line',
+    data:{
+      labels:['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+      datasets:[{
+        label:'Projected Savings (₹)',
+        data:<%- JSON.stringify(forecastData) %>,
+        borderColor:'rgba(16,185,129,1)',
+        backgroundColor:'rgba(16,185,129,0.2)',
+        fill:true,
+        tension:0.4
+      }]
+    },
+    options:{ responsive:true }
+  });
+}
+
+// Mobile Menu Toggle
+const menuBtn = document.getElementById('menu-btn');
+const mobileMenu = document.getElementById('mobile-menu');
+const overlay = document.getElementById('overlay');
+
+menuBtn.addEventListener('click', () => {
+  mobileMenu.classList.toggle('-translate-x-full');
+  overlay.classList.toggle('hidden');
+});
+
+overlay.addEventListener('click', () => {
+  mobileMenu.classList.add('-translate-x-full');
+  overlay.classList.add('hidden');
+});
+</script>
+
+</body>
+</html>

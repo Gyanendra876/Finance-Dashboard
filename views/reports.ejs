@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>📊 Financial Reports</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #f9fafb, #eef2ff); font-family: 'Inter', sans-serif; }
+    .card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 8px 16px rgba(0,0,0,0.08); }
+  </style>
+</head>
+<body class="min-h-screen text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="flex justify-between items-center px-6 py-4 sticky top-0 z-50 backdrop-blur bg-white/80 shadow">
+    <h1 class="text-2xl font-bold text-indigo-600">💰 Finance Dashboard</h1>
+    <ul class="hidden md:flex space-x-6 font-medium text-gray-700">
+      <li><a href="/dashboard" class="hover:text-indigo-600">Dashboard</a></li>
+      <li><a href="/transactions" class="hover:text-indigo-600">Transactions</a></li>
+      <li><a href="/reports" class="text-indigo-700 font-semibold border-b-2 border-indigo-600">Reports</a></li>
+      <li><a href="/logout" class="bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-700">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="max-w-6xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6 text-center">📈 Financial Reports Overview</h1>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+      <div class="bg-white p-5 rounded-xl card">
+        <h2 class="text-gray-600">Total Income</h2>
+        <p class="text-3xl font-bold text-green-600">₹<%= totalIncome %></p>
+      </div>
+      <div class="bg-white p-5 rounded-xl card">
+        <h2 class="text-gray-600">Total Expenses</h2>
+        <p class="text-3xl font-bold text-red-600">₹<%= totalExpense %></p>
+      </div>
+      <div class="bg-white p-5 rounded-xl card">
+        <h2 class="text-gray-600">Savings</h2>
+        <p class="text-3xl font-bold text-blue-600">₹<%= savings %></p>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+      <div class="bg-white p-5 rounded-xl card">
+        <h2 class="text-lg font-semibold mb-3">Category-wise Spending</h2>
+        <canvas id="categoryChart"></canvas>
+      </div>
+      <div class="bg-white p-5 rounded-xl card">
+        <h2 class="text-lg font-semibold mb-3">Expense vs Income</h2>
+        <canvas id="expenseIncomeChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Monthly Trend Chart -->
+    <div class="bg-white p-6 rounded-xl shadow card mb-12">
+      <h2 class="text-xl font-semibold mb-4">📅 Monthly Income & Expense Trend</h2>
+      <canvas id="monthlyTrendChart"></canvas>
+    </div>
+
+    <!-- Detailed Summary Table -->
+    <div class="bg-white shadow-md rounded-xl p-6 mb-10 card">
+      <h2 class="text-xl font-bold mb-4">Detailed Summary</h2>
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="border-b">
+            <th class="p-2">Category</th>
+            <th class="p-2">Type</th>
+            <th class="p-2">Amount (₹)</th>
+            <th class="p-2">Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% transactions.forEach(t => { %>
+            <tr class="border-b hover:bg-gray-50">
+              <td class="p-2"><%= t.category %></td>
+              <td class="p-2 capitalize <%= t.type === 'income' ? 'text-green-600' : 'text-red-600' %>"><%= t.type %></td>
+              <td class="p-2 font-medium">₹<%= t.amount %></td>
+              <td class="p-2"><%= new Date(t.date).toLocaleDateString() %></td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- AI Insights -->
+    <div class="bg-white shadow-lg p-6 rounded-2xl mb-12 card">
+      <h2 class="text-2xl font-bold mb-4">🧠 AI Insights</h2>
+      <pre class="whitespace-pre-wrap text-lg leading-relaxed"><%= aiReport %></pre>
+    </div>
+  </div>
+
+  <script>
+    const monthlyData = <%- JSON.stringify(monthlyData) %>;
+    const categoryData = <%- JSON.stringify(categoryTotals || {}) %>;
+    const totalIncome = <%= totalIncome %>;
+    const totalExpense = <%= totalExpense %>;
+    const savings = <%= savings %>;
+
+    // Monthly Trend Chart (Enhanced)
+    const ctxMonthly = document.getElementById('monthlyTrendChart');
+    if (ctxMonthly && monthlyData.labels.length) {
+      new Chart(ctxMonthly, {
+        type: 'line',
+        data: {
+          labels: monthlyData.labels,
+          datasets: [
+            {
+              label: 'Income',
+              data: monthlyData.income,
+              borderColor: '#34d399',
+              backgroundColor: 'rgba(52,211,153,0.1)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 3,
+              pointRadius: 5,
+              pointHoverRadius: 7
+            },
+            {
+              label: 'Expense',
+              data: monthlyData.expense,
+              borderColor: '#f87171',
+              backgroundColor: 'rgba(248,113,113,0.1)',
+              fill: true,
+              tension: 0.4,
+              borderWidth: 3,
+              pointRadius: 5,
+              pointHoverRadius: 7
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { position: 'bottom' } },
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Amount (₹)' } } },
+          animation: { duration: 1500, easing: 'easeInOutQuart' }
+        }
+      });
+    }
+
+    // Category Chart
+    const ctxCategory = document.getElementById('categoryChart');
+    if (ctxCategory && Object.keys(categoryData).length) {
+      new Chart(ctxCategory, {
+        type: 'doughnut',
+        data: {
+          labels: Object.keys(categoryData),
+          datasets: [{
+            data: Object.values(categoryData),
+            backgroundColor: ['#60a5fa','#f87171','#34d399','#fbbf24','#a78bfa','#f472b6'],
+            borderWidth: 2
+          }]
+        },
+        options: { animation:{animateScale:true, animateRotate:true}, plugins:{legend:{position:'bottom'}} }
+      });
+    }
+
+    // Expense vs Income Chart
+    const ctxEI = document.getElementById('expenseIncomeChart');
+    if (ctxEI) {
+      new Chart(ctxEI, {
+        type: 'bar',
+        data: {
+          labels: ['Income','Expenses','Savings'],
+          datasets:[{
+            label:'Amount (₹)',
+            data:[totalIncome,totalExpense,savings],
+            backgroundColor:['#34d399','#f87171','#60a5fa']
+          }]
+        },
+        options: {
+          scales:{y:{beginAtZero:true}},
+          animation:{duration:1500, easing:'easeOutBounce'}
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

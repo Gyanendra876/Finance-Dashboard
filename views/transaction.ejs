@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= transaction ? "Edit Transaction" : "Add Transaction" %> | FinTrack</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 min-h-screen flex flex-col items-center justify-start py-16 px-4">
+  <div class="w-full max-w-lg">
+    <h2 class="text-3xl font-bold text-center text-green-700 mb-8">
+      <%= transaction ? "✏️ Edit Transaction" : "➕ Add Transaction" %>
+    </h2>
+
+    <!-- Dynamic form -->
+    <form 
+      action="<%= transaction ? '/transactions/edit/' + transaction._id : '/transactions/add' %>" 
+      method="POST" 
+      class="space-y-5 bg-white shadow-lg rounded-xl p-8 border border-gray-100 transition hover:shadow-xl"
+    >
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Type:</label>
+        <select 
+          name="type" 
+          class="border border-gray-300 p-3 rounded-md w-full focus:ring-2 focus:ring-green-400 outline-none transition" 
+          required
+        >
+          <option value="income" <%= transaction && transaction.type === 'income' ? 'selected' : '' %>>Income</option>
+          <option value="expense" <%= transaction && transaction.type === 'expense' ? 'selected' : '' %>>Expense</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Category:</label>
+        <input 
+          type="text" 
+          name="category" 
+          class="border border-gray-300 p-3 rounded-md w-full focus:ring-2 focus:ring-green-400 outline-none transition" 
+          placeholder="e.g. Netflix"
+          value="<%= transaction ? transaction.category : '' %>" 
+          required
+        >
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Description:</label>
+        <input 
+          type="text" 
+          name="description" 
+          class="border border-gray-300 p-3 rounded-md w-full focus:ring-2 focus:ring-green-400 outline-none transition" 
+          placeholder="Optional"
+          value="<%= transaction ? transaction.description : '' %>"
+        >
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-medium mb-1">Amount (₹):</label>
+        <input 
+          type="number" 
+          name="amount" 
+          class="border border-gray-300 p-3 rounded-md w-full focus:ring-2 focus:ring-green-400 outline-none transition" 
+          value="<%= transaction ? transaction.amount : '' %>" 
+          required
+        >
+      </div>
+
+      <button 
+        type="submit" 
+        class="w-full bg-green-600 text-white py-2.5 rounded-md font-medium hover:bg-green-700 transition"
+      >
+        <%= transaction ? "💾 Update Transaction" : "✅ Add Transaction" %>
+      </button>
+    </form>
+
+    <% if (transaction) { %>
+      <!-- Optional delete button -->
+      <form 
+        action="/transactions/delete/<%= transaction._id %>" 
+        method="POST" 
+        onsubmit="return confirm('Are you sure you want to delete this transaction?')" 
+        class="mt-4"
+      >
+        <button 
+          type="submit" 
+          class="w-full bg-red-600 text-white py-2.5 rounded-md font-medium hover:bg-red-700 transition"
+        >
+          🗑️ Delete Transaction
+        </button>
+      </form>
+    <% } %>
+  </div>
+</body>
+</html>
