@@ -9,8 +9,10 @@ router.get('/google/callback', passport.authenticate('google', { failureRedirect
   res.redirect('/dashboard');
 });
 
+
 // Logout
 router.get('/logout', authController.logout);
+
 
 // Email/password login & register
 router.post('/login', authController.login);

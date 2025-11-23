@@ -2,45 +2,174 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Finance App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Dashboard</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen flex items-center justify-center bg-gray-100">
-  <div class="bg-white p-10 rounded-xl shadow-lg w-96">
-    <h1 class="text-2xl font-bold text-center mb-6">💸 Finance App</h1>
+<body class="bg-gray-50 relative overflow-x-hidden">
 
-    <% if (typeof error !== 'undefined') { %>
-      <p class="text-red-500 mb-4"><%= error %></p>
-    <% } %>
+  <!-- Navbar -->
+  <header class="w-full py-5 px-10 flex justify-between items-center bg-white shadow z-20 relative">
+    <h1 class="text-2xl font-bold text-indigo-700">FinanceDash</h1>
+  </header>
 
-    <!-- Tabs -->
-    <div class="flex justify-around mb-6">
-      <button id="loginBtn" class="font-semibold text-indigo-600 border-b-2 border-indigo-600 pb-1">Login</button>
-      <button id="signupBtn" class="font-semibold text-gray-400 pb-1">Sign Up</button>
+  <!-- Hero Section (UNCHANGED) -->
+  <section class="relative flex flex-col md:flex-row items-center justify-between px-10 md:px-20 mt-14 z-10">
+    
+    <!-- Left Text + Get Started -->
+    <div class="md:w-1/2 flex flex-col justify-center z-10">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight">
+        Manage Your <span class="text-indigo-600">Finances</span> Effortlessly & Smartly
+      </h2>
+      <p class="mt-5 text-gray-600 text-lg">
+        Track expenses, monitor savings, and make smarter financial decisions. Your finances — simplified, visual, and secure.
+      </p>
+      <button id="getStartedBtn" class="mt-6 bg-indigo-600 text-white px-5 py-2.5 rounded-lg text-base font-semibold hover:bg-indigo-700 transition">
+        Get Started
+      </button>
     </div>
 
-    <!-- Login Form -->
-    <form id="loginForm" action="/auth/login" method="POST" class="">
-      <input type="email" name="email" placeholder="Email" required class="w-full mb-3 p-2 border rounded-lg">
-      <input type="password" name="password" placeholder="Password" required class="w-full mb-3 p-2 border rounded-lg">
-      <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg mb-3 hover:bg-indigo-700">Login</button>
-      <a href="/auth/google" class="w-full text-center block py-2 border rounded-lg hover:bg-gray-100">Login with Google</a>
-    </form>
+    <!-- Right Hero Image -->
+    <div class="md:w-1/2 mt-10 md:mt-0 relative">
+      <img src="https://img.freepik.com/free-vector/personal-finance-concept-illustration_114360-1530.jpg" 
+           alt="Finance Dashboard Illustration"
+           class="w-full hero-img relative z-10">
+    </div>
 
-    <!-- Sign Up Form -->
-    <form id="signupForm" action="/auth/register" method="POST" class="hidden">
-      <input type="text" name="name" placeholder="Name" required class="w-full mb-3 p-2 border rounded-lg">
-      <input type="email" name="email" placeholder="Email" required class="w-full mb-3 p-2 border rounded-lg">
-      <input type="password" name="password" placeholder="Password" required class="w-full mb-3 p-2 border rounded-lg">
-      <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg mb-3 hover:bg-green-700">Sign Up</button>
-    </form>
+    <!-- Decorative Floating Icons -->
+    <img src="https://img.icons8.com/color/96/000000/money.png" class="absolute top-10 right-10 w-12 h-12 animate-bounce opacity-80 z-0">
+    <img src="https://img.icons8.com/color/96/000000/line-chart.png" class="absolute top-32 left-10 w-14 h-14 animate-bounce opacity-70 z-0">
+    <img src="https://img.icons8.com/color/96/000000/safe-box.png" class="absolute bottom-10 right-20 w-16 h-16 animate-bounce opacity-60 z-0">
+  </section>
+
+ <!-- Fixed Icon Cluster Section with all icons visible -->
+<!-- Fixed Icon Cluster Section with all icons visible -->
+<section class="mt-32 px-10 md:px-20 relative z-10">
+
+  <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
+    <!-- Money -->
+    <div class="p-6 bg-white rounded-xl shadow hover:shadow-2xl transform hover:-translate-y-2 transition text-center">
+      <img src="https://img.icons8.com/color/96/000000/money.png" class="mx-auto mb-3 w-16 h-16">
+      <p class="font-semibold text-gray-700">Money</p>
+    </div>
+
+    <!-- Analytics -->
+    <div class="p-6 bg-white rounded-xl shadow hover:shadow-2xl transform hover:-translate-y-2 transition text-center">
+      <img src="https://img.icons8.com/color/96/000000/line-chart.png" class="mx-auto mb-3 w-16 h-16">
+      <p class="font-semibold text-gray-700">Analytics</p>
+    </div>
+
+    <!-- Security -->
+    <div class="p-6 bg-white rounded-xl shadow hover:shadow-2xl transform hover:-translate-y-2 transition text-center">
+      <img src="https://img.icons8.com/color/96/000000/security-checked.png" class="mx-auto mb-3 w-16 h-16">
+      <p class="font-semibold text-gray-700">Security</p>
+    </div>
+
+    <!-- Savings (Working URL) -->
+    <div class="p-6 bg-white rounded-xl shadow hover:shadow-2xl transform hover:-translate-y-2 transition text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/2331/2331940.png" class="mx-auto mb-3 w-16 h-16">
+      <p class="font-semibold text-gray-700">Savings</p>
+    </div>
+
+    <!-- Cards (Working URL) -->
+    <div class="p-6 bg-white rounded-xl shadow hover:shadow-2xl transform hover:-translate-y-2 transition text-center">
+      <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="mx-auto mb-3 w-16 h-16">
+      <p class="font-semibold text-gray-700">Cards</p>
+    </div>
+
+    <!-- Coins -->
+    <div class="p-6 bg-white rounded-xl shadow hover:shadow-2xl transform hover:-translate-y-2 transition text-center">
+      <img src="https://img.icons8.com/color/96/000000/coins.png" class="mx-auto mb-3 w-16 h-16">
+      <p class="font-semibold text-gray-700">Coins</p>
+    </div>
+
+    <!-- Money Bag -->
+    <div class="p-6 bg-white rounded-xl shadow hover:shadow-2xl transform hover:-translate-y-2 transition text-center">
+      <img src="https://img.icons8.com/color/96/000000/money-bag.png" class="mx-auto mb-3 w-16 h-16">
+      <p class="font-semibold text-gray-700">Money Bag</p>
+    </div>
+
+    <!-- Wallet -->
+    <div class="p-6 bg-white rounded-xl shadow hover:shadow-2xl transform hover:-translate-y-2 transition text-center">
+      <img src="https://img.icons8.com/color/96/000000/wallet.png" class="mx-auto mb-3 w-16 h-16">
+      <p class="font-semibold text-gray-700">Wallet</p>
+    </div>
+  </div>
+</section>
+
+
+    <!-- Floating decorative icons -->
+    
+
+  <!-- Features Section -->
+  <section class="mt-32 px-10 md:px-20 relative z-10">
+    <h3 class="text-3xl font-bold text-center mb-10 text-gray-800">Why Choose FinanceDash?</h3>
+    <div class="grid md:grid-cols-3 gap-10">
+
+      <div class="bg-white p-8 rounded-xl shadow hover:shadow-2xl transition transform hover:-translate-y-2 text-center">
+        <img src="https://img.icons8.com/color/96/000000/money.png" class="mx-auto mb-3 w-12 h-12">
+        <h4 class="text-xl font-semibold text-indigo-600 mb-2">Expense Tracking</h4>
+        <p class="text-gray-600">Automatically track and categorize all your expenses in one clean dashboard.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow hover:shadow-2xl transition transform hover:-translate-y-2 text-center">
+        <img src="https://img.icons8.com/color/96/000000/line-chart.png" class="mx-auto mb-3 w-12 h-12">
+        <h4 class="text-xl font-semibold text-indigo-600 mb-2">Visual Analytics</h4>
+        <p class="text-gray-600">Get beautiful charts and insights to understand your spending habits better.</p>
+      </div>
+
+      <div class="bg-white p-8 rounded-xl shadow hover:shadow-2xl transition transform hover:-translate-y-2 text-center">
+        <img src="https://img.icons8.com/color/96/000000/safe-box.png" class="mx-auto mb-3 w-12 h-12">
+        <h4 class="text-xl font-semibold text-indigo-600 mb-2">Secure & Private</h4>
+        <p class="text-gray-600">Your financial data is fully protected with industry-standard security.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Modal Login/Signup -->
+  <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md relative">
+      <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">&times;</button>
+      <h1 class="text-2xl font-bold text-center mb-6">💸 Finance App</h1>
+
+      <!-- Tabs -->
+      <div class="flex justify-around mb-6">
+        <button id="loginBtn" class="font-semibold text-indigo-600 border-b-2 border-indigo-600 pb-1">Login</button>
+        <button id="signupBtn" class="font-semibold text-gray-400 pb-1">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" action="/auth/login" method="POST">
+        <input type="email" name="email" placeholder="Email" required class="w-full mb-3 p-2 border rounded-lg">
+        <input type="password" name="password" placeholder="Password" required class="w-full mb-3 p-2 border rounded-lg">
+        <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg mb-3 hover:bg-indigo-700">Login</button>
+        <a href="/auth/google" class="w-full text-center block py-2 border rounded-lg hover:bg-gray-100">Login with Google</a>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="signupForm" action="/auth/register" method="POST" class="hidden">
+        <input type="text" name="name" placeholder="Name" required class="w-full mb-3 p-2 border rounded-lg">
+        <input type="email" name="email" placeholder="Email" required class="w-full mb-3 p-2 border rounded-lg">
+        <input type="password" name="password" placeholder="Password" required class="w-full mb-3 p-2 border rounded-lg">
+        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg mb-3 hover:bg-green-700">Sign Up</button>
+      </form>
+    </div>
   </div>
 
   <script>
+    const getStartedBtn = document.getElementById('getStartedBtn');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const closeModal = document.getElementById('closeModal');
+
     const loginBtn = document.getElementById('loginBtn');
     const signupBtn = document.getElementById('signupBtn');
     const loginForm = document.getElementById('loginForm');
     const signupForm = document.getElementById('signupForm');
+
+    getStartedBtn.addEventListener('click', () => modalOverlay.classList.remove('hidden'));
+    closeModal.addEventListener('click', () => modalOverlay.classList.add('hidden'));
+    modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) modalOverlay.classList.add('hidden'); });
 
     loginBtn.addEventListener('click', () => {
       loginForm.classList.remove('hidden');
@@ -60,5 +189,6 @@
       loginBtn.classList.add('text-gray-400');
     });
   </script>
+
 </body>
 </html>
