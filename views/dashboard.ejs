@@ -212,8 +212,8 @@
                   <td class="py-2 px-4 font-medium <%= t.type === 'income' ? 'text-green-600' : 'text-red-600' %>">₹<%= t.amount %></td>
                   <td class="py-2 px-4 text-center">
                     <div class="flex justify-center items-center gap-2">
-                      <a href="/transactions/edit/<%= t._id %>" class="p-2 rounded-lg border border-gray-300 text-blue-600 hover:bg-blue-50">✏️</a>
-                      <form action="/transactions/delete/<%= t._id %>" method="POST">
+                      <a href="/transaction/edit/<%= t._id %>" class="p-2 rounded-lg border border-gray-300 text-blue-600 hover:bg-blue-50">✏️</a>
+                      <form action="/transaction/delete/<%= t._id %>" method="POST">
                         <button type="submit" class="p-2 rounded-lg border border-gray-300 text-red-600 hover:bg-red-50">🗑️</button>
                       </form>
                     </div>
