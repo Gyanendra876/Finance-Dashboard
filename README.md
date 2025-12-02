@@ -86,6 +86,10 @@ The project is deployed on Render
 
 Live Demo: https://finance-dashboard-frontend-e8um.onrender.com
 
+ Login Credential:
+ email-harshsinha06y@gmail.com
+ password-Harsh@123
+
 Render automatically pulls updates from GitHub for continuous deployment.
 
 Make sure all .env variables are configured in Render’s Environment settings for production.
@@ -119,4 +123,4 @@ Author
 
 Gyanendra Sinha
 
-Email: harshsinha06x@gmail.com
+Email: harshsinha06y@gmail.com
