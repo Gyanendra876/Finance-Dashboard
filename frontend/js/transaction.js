@@ -13,9 +13,14 @@ function getTokenHeader() {
 // FETCH HELPERS
 async function getData(endpoint) {
   try {
-    const res = await fetch(`${API_URL}/${endpoint}`, { headers: { "Content-Type": "application/json", ...getTokenHeader() } });
+    const res = await fetch(`${API_URL}/${endpoint}`, { 
+      headers: { "Content-Type": "application/json", ...getTokenHeader() } 
+    });
     return await res.json();
-  } catch (err) { console.error("GET Error:", err); return null; }
+  } catch (err) { 
+    console.error("GET Error:", err); 
+    return null; 
+  }
 }
 
 async function postData(endpoint, data) {
@@ -26,7 +31,10 @@ async function postData(endpoint, data) {
       body: JSON.stringify(data)
     });
     return await res.json();
-  } catch (err) { console.error("POST Error:", err); return null; }
+  } catch (err) { 
+    console.error("POST Error:", err); 
+    return null; 
+  }
 }
 
 async function deleteData(endpoint) {
@@ -36,18 +44,34 @@ async function deleteData(endpoint) {
       headers: { "Content-Type": "application/json", ...getTokenHeader() },
     });
     return await res.json();
-  } catch (err) { console.error("DELETE Error:", err); return null; }
+  } catch (err) { 
+    console.error("DELETE Error:", err); 
+    return null; 
+  }
 }
 
 // LOGOUT
-document.getElementById('logoutBtn')?.addEventListener('click', () => { localStorage.removeItem('token'); window.location.href = 'index.html'; });
-document.getElementById('mobileLogoutBtn')?.addEventListener('click', () => { localStorage.removeItem('token'); window.location.href = 'index.html'; });
+document.getElementById('logoutBtn')?.addEventListener('click', () => { 
+  localStorage.removeItem('token'); 
+  window.location.href = 'index.html'; 
+});
+document.getElementById('mobileLogoutBtn')?.addEventListener('click', () => { 
+  localStorage.removeItem('token'); 
+  window.location.href = 'index.html'; 
+});
 
 // MOBILE MENU
 const menuBtn = document.getElementById("menu-btn");
 const mobileMenu = document.getElementById("mobile-menu");
 const overlay = document.getElementById("overlay");
-menuBtn?.addEventListener("click", () => { mobileMenu.classList.toggle("-translate-x-full"); overlay.classList.toggle("hidden"); });
+menuBtn?.addEventListener("click", () => { 
+  mobileMenu.classList.toggle("-translate-x-full"); 
+  overlay.classList.toggle("hidden"); 
+});
+overlay?.addEventListener("click", () => {
+  mobileMenu.classList.add("-translate-x-full");
+  overlay.classList.add("hidden");
+});
 
 // ADD / UPDATE TRANSACTION
 document.getElementById("transactionForm")?.addEventListener("submit", async (e) => {
@@ -67,7 +91,11 @@ document.getElementById("transactionForm")?.addEventListener("submit", async (e)
 
   const res = await postData(endpoint, data);
 
-  if (res?.transaction || res?.msg === "Transaction updated") {
+  if (res?.transaction) {
+    // New transaction added → redirect to dashboard
+    window.location.href = "dashboard.html";
+  } else if (res?.msg === "Transaction updated") {
+    // Transaction edited → stay on page
     editingId = null;
     form.reset();
     form.querySelector("button[type='submit']").textContent = "Add";
