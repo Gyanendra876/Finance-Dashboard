@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>📊 Financial Reports</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
   <style>
     body {
       background: linear-gradient(135deg, #f9fafb, #eef2ff);
@@ -22,86 +21,36 @@
 </head>
 <body class="min-h-screen text-gray-800">
 
+  <!-- NAVBAR -->
   <nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center sticky top-0 z-50">
-  <div class="flex items-center gap-2">
-    <span class="text-indigo-600 text-3xl">💸</span>
-    <h1 class="text-2xl font-bold text-indigo-600">Finance Dashboard</h1>
-  </div>
-
-  <!-- Desktop Menu -->
-  <ul class="hidden md:flex space-x-6 text-gray-700 font-medium items-center">
-    <li>
-      <a href="dashboard.html" class="flex items-center gap-2 hover:text-indigo-600">
-        <i data-lucide="layout-dashboard"></i> Dashboard
-      </a>
-    </li>
-    <li>
-      <a href="transaction.html" class="flex items-center gap-2 hover:text-indigo-600">
-        <i data-lucide="circle-plus"></i> Add Transaction
-      </a>
-    </li>
-    <li>
-      <a href="reports.html" class="flex items-center gap-2 hover:text-indigo-600">
-        <i data-lucide="bar-chart-3"></i> Reports
-      </a>
-    </li>
-    <li>
-      <button id="logoutBtn" class="flex items-center gap-2 text-red-500 hover:text-red-600">
-        <i data-lucide="log-out"></i> Logout
-      </button>
-    </li>
-  </ul>
-
-  <!-- Mobile Menu Button -->
-  <button id="menu-btn" class="md:hidden text-gray-800 focus:outline-none">
-    <i data-lucide="menu" class="w-7 h-7"></i>
-  </button>
-</nav>
-
-<!-- MOBILE SIDEBAR -->
-<!-- MOBILE SIDEBAR -->
-<div id="mobile-menu" class="absolute top-16 left-0 h-screen w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50 md:hidden">
-  <div class="p-6 space-y-6">
-
-    <ul class="space-y-5 text-gray-700 font-medium">
-      <li>
-        <a href="dashboard.html" class="flex items-center gap-3 hover:text-indigo-600">
-          <i data-lucide="layout-dashboard"></i> Dashboard
-        </a>
-      </li>
-      <li>
-        <a href="transaction.html" class="flex items-center gap-3 hover:text-indigo-600">
-          <i data-lucide="circle-plus"></i> Add Transaction
-        </a>
-      </li>
-      <li>
-        <a href="reports.html" class="flex items-center gap-3 hover:text-indigo-600">
-          <i data-lucide="bar-chart-3"></i> Reports
-        </a>
-      </li>
-      <li>
-        <button id="mobileLogoutBtn" class="flex items-center gap-3 text-red-500 hover:text-red-600">
-          <i data-lucide="log-out"></i> Logout
-        </button>
-      </li>
+    <div class="flex items-center gap-2">
+      <span class="text-indigo-600 text-3xl">💸</span>
+      <h1 class="text-2xl font-bold text-indigo-600">Finance Dashboard</h1>
+    </div>
+    <ul class="hidden md:flex space-x-6 text-gray-700 font-medium items-center">
+      <li><a href="dashboard.html" class="flex items-center gap-2 hover:text-indigo-600"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+      <li><a href="transaction.html" class="flex items-center gap-2 hover:text-indigo-600"><i data-lucide="circle-plus"></i> Add Transaction</a></li>
+      <li><a href="reports.html" class="flex items-center gap-2 hover:text-indigo-600"><i data-lucide="bar-chart-3"></i> Reports</a></li>
+      <li><button id="logoutBtn" class="flex items-center gap-2 text-red-500 hover:text-red-600"><i data-lucide="log-out"></i> Logout</button></li>
     </ul>
+    <button id="menu-btn" class="md:hidden text-gray-800 focus:outline-none"><i data-lucide="menu" class="w-7 h-7"></i></button>
+  </nav>
+
+  <!-- MOBILE SIDEBAR -->
+  <div id="mobile-menu" class="absolute top-16 left-0 h-screen w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50 md:hidden">
+    <div class="p-6 space-y-6">
+      <ul class="space-y-5 text-gray-700 font-medium">
+        <li><a href="dashboard.html" class="flex items-center gap-3 hover:text-indigo-600"><i data-lucide="layout-dashboard"></i> Dashboard</a></li>
+        <li><a href="transaction.html" class="flex items-center gap-3 hover:text-indigo-600"><i data-lucide="circle-plus"></i> Add Transaction</a></li>
+        <li><a href="reports.html" class="flex items-center gap-3 hover:text-indigo-600"><i data-lucide="bar-chart-3"></i> Reports</a></li>
+        <li><button id="mobileLogoutBtn" class="flex items-center gap-3 text-red-500 hover:text-red-600"><i data-lucide="log-out"></i> Logout</button></li>
+      </ul>
+    </div>
   </div>
-</div>
+  <div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden z-40 md:hidden"></div>
 
-<!-- OVERLAY -->
-<div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden z-40 md:hidden"></div>
-
-<!-- LUCIDE ICONS -->
-
-<!-- MENU + LOGOUT FIX SCRIPT -->
-
-
-  <!-- Mobile Sidebar -->
-  
-
- <!-- MAIN CONTENT -->
+  <!-- MAIN CONTENT -->
   <main class="p-6 md:p-8 space-y-8 max-w-7xl mx-auto">
-
     <!-- Summary Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <div class="bg-white p-5 rounded-xl card text-center">
@@ -118,7 +67,7 @@
       </div>
     </section>
 
-    <!-- Category & Expense vs Income Charts -->
+    <!-- Charts -->
     <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
       <div class="bg-white p-5 rounded-xl card">
         <h2 class="text-lg font-semibold mb-3">Category-wise Spending</h2>
@@ -130,130 +79,113 @@
       </div>
     </section>
 
-    <!-- Monthly Trend Chart -->
     <section class="bg-white p-6 rounded-xl card">
       <h2 class="text-xl font-semibold mb-4">📅 Monthly Income & Expense Trend</h2>
       <canvas id="monthlyTrendChart"></canvas>
     </section>
 
-    <!-- AI Insights -->
     <section class="bg-white p-6 rounded-2xl card">
       <h2 class="text-2xl font-bold mb-4">🧠 AI Insights</h2>
       <pre id="aiInsights" class="whitespace-pre-wrap text-lg leading-relaxed">Loading...</pre>
     </section>
-
   </main>
-     
- <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="https://unpkg.com/lucide@latest"></script>
 
-<script>
-  // --- MENU + OVERLAY ---
-  const menuBtn = document.getElementById("menu-btn");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const overlay = document.getElementById("overlay");
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    lucide.createIcons();
 
-  menuBtn?.addEventListener("click", () => {
-    mobileMenu.classList.toggle("-translate-x-full");
-    overlay.classList.toggle("hidden");
-  });
+    const menuBtn = document.getElementById("menu-btn");
+    const mobileMenu = document.getElementById("mobile-menu");
+    const overlay = document.getElementById("overlay");
 
-  overlay?.addEventListener("click", () => {
-    mobileMenu.classList.add("-translate-x-full");
-    overlay.classList.add("hidden");
-  });
+    menuBtn?.addEventListener("click", () => {
+      mobileMenu.classList.toggle("-translate-x-full");
+      overlay.classList.toggle("hidden");
+    });
+    overlay?.addEventListener("click", () => {
+      mobileMenu.classList.add("-translate-x-full");
+      overlay.classList.add("hidden");
+    });
 
-  // --- LOGOUT ---
-  document.getElementById("logoutBtn")?.addEventListener("click", () => {
-    localStorage.removeItem("token");
-    window.location.href = "index.html";
-  });
-  document.getElementById("mobileLogoutBtn")?.addEventListener("click", () => {
-    localStorage.removeItem("token");
-    window.location.href = "index.html";
-  });
+    document.getElementById("logoutBtn")?.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      window.location.href = "index.html";
+    });
+    document.getElementById("mobileLogoutBtn")?.addEventListener("click", () => {
+      localStorage.removeItem("token");
+      window.location.href = "index.html";
+    });
 
-  // --- LOAD REPORTS ---
-  async function loadReports() {
-    try {
+    const API_URL = "https://finance-dashboard-3juc.onrender.com/api";
+
+    async function loadReports() {
       const token = localStorage.getItem('token');
-      if (!token) throw new Error('No JWT token found.');
+      if (!token) { window.location.href = "index.html"; return; }
 
-      const res = await fetch('https://finance-dashboard-3juc.onrender.com/api', {
-        headers: { 'Authorization': 'Bearer ' + token }
-      });
+      try {
+        const res = await fetch(`${API_URL}/reports`, {
+          headers: { "Authorization": "Bearer " + token }
+        });
+        if (!res.ok) throw new Error("Failed to fetch reports");
 
-      if (!res.ok) throw new Error('API error: ' + res.status);
-      const data = await res.json();
+        const data = await res.json();
 
-      // Summary cards
-      document.getElementById('totalIncome').innerText = '₹' + data.totalIncome;
-      document.getElementById('totalExpense').innerText = '₹' + data.totalExpense;
-      document.getElementById('savings').innerText = '₹' + data.savings;
+        document.getElementById('totalIncome').innerText = '₹' + (data.totalIncome || 0);
+        document.getElementById('totalExpense').innerText = '₹' + (data.totalExpense || 0);
+        document.getElementById('savings').innerText = '₹' + (data.savings || 0);
+        document.getElementById('aiInsights').innerText = data.aiReport || "No insights available";
 
-      // AI Report
-      document.getElementById('aiInsights').innerText = data.aiReport;
+        // Category Chart
+        new Chart(document.getElementById('categoryChart'), {
+          type: 'bar',
+          data: {
+            labels: Object.keys(data.categoryTotals || {}),
+            datasets: [{
+              label: 'Amount (₹)',
+              data: Object.values(data.categoryTotals || {}),
+              backgroundColor: ['#60a5fa','#f87171','#34d399','#fbbf24','#a78bfa','#f472b6'],
+            }]
+          },
+          options: { indexAxis:'y', scales:{ x:{ beginAtZero:true }} }
+        });
 
-      // Category Chart
-      new Chart(document.getElementById('categoryChart'), {
-        type: 'bar',
-        data: {
-          labels: Object.keys(data.categoryTotals),
-          datasets: [{
-            label: 'Amount (₹)',
-            data: Object.values(data.categoryTotals),
-            backgroundColor: ['#60a5fa','#f87171','#34d399','#fbbf24','#a78bfa','#f472b6'],
-          }]
-        },
-        options: { indexAxis:'y', scales:{ x:{ beginAtZero:true }} }
-      });
+        // Expense vs Income
+        new Chart(document.getElementById('expenseIncomeChart'), {
+          type:'bar',
+          data:{
+            labels:['Income','Expenses','Savings'],
+            datasets:[{
+              data:[data.totalIncome || 0, data.totalExpense || 0, data.savings || 0],
+              backgroundColor:['#34d399','#f87171','#60a5fa']
+            }]
+          },
+          options:{ scales:{ y:{ beginAtZero:true }} }
+        });
 
-      // Expense vs Income Chart
-      new Chart(document.getElementById('expenseIncomeChart'), {
-        type:'bar',
-        data:{
-          labels:['Income','Expenses','Savings'],
-          datasets:[{
-            data:[data.totalIncome, data.totalExpense, data.savings],
-            backgroundColor:['#34d399','#f87171','#60a5fa']
-          }]
-        },
-        options:{ scales:{ y:{ beginAtZero:true }} }
-      });
+        // Monthly Trend
+        const labels = data.monthlyData?.labels || ["Jan","Feb","Mar","Apr","May","Jun"];
+        const income = data.monthlyData?.income || [0,0,0,0,0,0];
+        const expense = data.monthlyData?.expense || [0,0,0,0,0,0];
 
-      // Monthly Trend Chart
-      const labels = data.monthlyData.labels || ["Jan","Feb","Mar","Apr","May","Jun"];
-      const income = data.monthlyData.income || [0,0,0,0,0,0];
-      const expense = data.monthlyData.expense || [0,0,0,0,0,0];
+        new Chart(document.getElementById("monthlyTrendChart"), {
+          type: "bar",
+          data: {
+            labels,
+            datasets: [
+              { label: "Income", data: income, backgroundColor: "#34d399" },
+              { label: "Expense", data: expense, backgroundColor: "#f87171" }
+            ]
+          },
+          options: { responsive:true, plugins:{legend:{position:'top'}}, scales:{x:{stacked:true}, y:{stacked:true, beginAtZero:true}} }
+        });
 
-      new Chart(document.getElementById("monthlyTrendChart").getContext("2d"), {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            { label: "Income", data: income, backgroundColor: "#34d399" },
-            { label: "Expense", data: expense, backgroundColor: "#f87171" }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: true,
-          aspectRatio: 2.2,
-          plugins: { legend: { position: "top" } },
-          scales: { x: { stacked: true }, y: { stacked: true, beginAtZero:true } }
-        }
-      });
-
-    } catch(err) {
-      alert('Error: ' + err.message);
+      } catch(err) {
+        alert("Error loading reports: " + err.message);
+      }
     }
-  }
 
-  loadReports();
-
-  // --- INIT LUCIDE ICONS ---
-  lucide.createIcons();
-</script>
+    loadReports();
+  </script>
 </body>
 </html>
