@@ -1,5 +1,5 @@
 const Transaction = require('../models/Transaction');
-const User = require('../models/User');
+const User = require('../models/user');
 
 // List all transactions
 exports.listTransactions = async (req, res) => {
