@@ -84,7 +84,7 @@ Deployment
 The project is deployed on Render
 :
 
-Live Demo: https://finance-dashboard-3juc.onrender.com
+Live Demo: https://finance-dashboard-frontend-e8um.onrender.com
 
 Render automatically pulls updates from GitHub for continuous deployment.
 
