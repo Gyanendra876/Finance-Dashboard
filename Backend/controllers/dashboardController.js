@@ -4,7 +4,7 @@ const Goal = require('../models/Goal');
 const Budget = require('../models/Budget');
 const Bill = require('../models/Bill');
 const Quote = require('../models/Quotes');
-const User = require('../models/User');
+const User = require('../models/user');
 
 exports.getDashboard = async (req, res) => {
   try {
