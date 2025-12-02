@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>💸 Finance Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body { background: linear-gradient(135deg, #f9fafb, #eef2ff); font-family: 'Inter', sans-serif; }
+    .custom-scroll { max-height: 260px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #6366f1 transparent; }
+    .custom-scroll::-webkit-scrollbar { width: 6px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background-color: rgba(99,102,241,0.5); border-radius: 4px; }
+    .custom-scroll::-webkit-scrollbar-thumb:hover { background-color: rgba(79,70,229,0.8); }
+  </style>
+</head>
+<body class="min-h-screen text-gray-800">
+
+  <!-- NAVBAR -->
+<nav class="bg-white shadow-md py-3 px-6 flex justify-between items-center sticky top-0 z-50">
+  <div class="flex items-center gap-2">
+    <span class="text-indigo-600 text-3xl">💸</span>
+    <h1 class="text-2xl font-bold text-indigo-600">Finance Dashboard</h1>
+  </div>
+
+  <!-- Desktop Menu -->
+  <ul class="hidden md:flex space-x-6 text-gray-700 font-medium items-center">
+    <li>
+      <a href="dashboard.html" class="flex items-center gap-2 hover:text-indigo-600">
+        <i data-lucide="layout-dashboard"></i> Dashboard
+      </a>
+    </li>
+    <li>
+      <a href="transaction.html" class="flex items-center gap-2 hover:text-indigo-600">
+        <i data-lucide="circle-plus"></i> Add Transaction
+      </a>
+    </li>
+    <li>
+      <a href="reports.html" class="flex items-center gap-2 hover:text-indigo-600">
+        <i data-lucide="bar-chart-3"></i> Reports
+      </a>
+    </li>
+    <li>
+      <button id="logoutBtn" class="flex items-center gap-2 text-red-500 hover:text-red-600">
+        <i data-lucide="log-out"></i> Logout
+      </button>
+    </li>
+  </ul>
+
+  <!-- Mobile Menu Button -->
+  <button id="menu-btn" class="md:hidden text-gray-800 focus:outline-none">
+    <i data-lucide="menu" class="w-7 h-7"></i>
+  </button>
+</nav>
+
+<!-- MOBILE SIDEBAR -->
+<div id="mobile-menu"class="fixed top-16 left-0 h-full w-64 bg-white shadow-lg transform -translate-x-full transition-transform duration-300 z-50">
+
+  <div class="p-6 space-y-6">
+   
+
+    <ul class="space-y-5 text-gray-700 font-medium">
+      <li>
+        <a href="dashboard.html" class="flex items-center gap-3 hover:text-indigo-600">
+          <i data-lucide="layout-dashboard"></i> Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="transaction.html" class="flex items-center gap-3 hover:text-indigo-600">
+          <i data-lucide="circle-plus"></i> Add Transaction
+        </a>
+      </li>
+      <li>
+        <a href="reports.html" class="flex items-center gap-3 hover:text-indigo-600">
+          <i data-lucide="bar-chart-3"></i> Reports
+        </a>
+      </li>
+      <li>
+        <button id="mobileLogoutBtn" class="flex items-center gap-3 text-red-500 hover:text-red-600">
+          <i data-lucide="log-out"></i> Logout
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div id="overlay" class="fixed inset-0 bg-black opacity-50 hidden z-40"></div>
+
+<!-- LUCIDE ICONS -->
+
+<!-- MENU + LOGOUT FIX SCRIPT -->
+
+
+  <!-- Mobile Sidebar -->
+  
+
+
+  <main class="p-6 md:p-8 space-y-8 max-w-7xl mx-auto">
+
+    <!-- Summary Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 text-center">
+        <h3 class="text-gray-500 text-sm font-medium">Total Income</h3>
+        <p id="totalIncome" class="text-2xl font-bold text-green-600 mt-2">₹0</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 text-center">
+        <h3 class="text-gray-500 text-sm font-medium">Total Expense</h3>
+        <p id="totalExpense" class="text-2xl font-bold text-red-600 mt-2">₹0</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 text-center">
+        <h3 class="text-gray-500 text-sm font-medium">Net Savings</h3>
+        <p id="savings" class="text-2xl font-bold text-blue-600 mt-2">₹0</p>
+      </div>
+      <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 text-center">
+        <h3 class="text-gray-500 text-sm font-medium">Transactions</h3>
+        <p id="totalTx" class="text-2xl font-bold text-gray-800 mt-2">0</p>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">📅 Weekly Spending</h2>
+        <canvas id="weeklySpendingChart" height="140"></canvas>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">💰 Savings Forecast</h2>
+        <canvas id="savingsForecastChart" height="140"></canvas>
+      </div>
+    </section>
+
+    <!-- Alerts & Motivation -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="bg-yellow-50 p-6 rounded-2xl shadow-md border border-yellow-200">
+        <h3 class="font-semibold text-lg mb-2 text-yellow-700">⚠️ Smart Alerts</h3>
+        <ul id="alertsList" class="list-disc list-inside space-y-1 text-gray-700">
+          <li>✅ Loading alerts...</li>
+        </ul>
+      </div>
+      <div class="bg-indigo-50 p-6 rounded-2xl shadow-md border border-indigo-200">
+        <h3 class="font-semibold text-lg mb-2 text-indigo-700">💡 Daily Motivation</h3>
+        <p id="quoteText" class="text-gray-800 italic">Loading quote...</p>
+        <p id="quoteAuthor" class="text-sm text-gray-500 mt-2"></p>
+      </div>
+    </section>
+
+    <!-- Goals -->
+    
+
+    <!-- Bills & Transactions -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Bills -->
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition flex flex-col">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">🧾 Upcoming Bills & Due Dates</h2>
+        <form id="addBillForm" class="flex flex-wrap gap-3 mb-4">
+          <input type="text" id="billTitle" placeholder="Bill name (e.g. Rent)" class="border border-gray-300 rounded-lg px-3 py-2 flex-1 focus:ring-2 focus:ring-indigo-300" required>
+          <input type="number" id="billAmount" placeholder="Amount (₹)" class="border border-gray-300 rounded-lg px-3 py-2 w-32 focus:ring-2 focus:ring-indigo-300" required>
+          <input type="date" id="billDueDate" class="border border-gray-300 rounded-lg px-3 py-2 w-40 focus:ring-2 focus:ring-indigo-300" required>
+          <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700">➕ Add</button>
+        </form>
+        <ul id="billsList" class="flex-1 max-h-72 overflow-y-auto pr-2 custom-scroll"></ul>
+      </div>
+
+      <!-- Transactions -->
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <h2 class="text-lg font-semibold mb-4 text-gray-800">📅 Recent Transactions</h2>
+        <div class="overflow-x-auto">
+          <table class="min-w-full bg-white rounded-lg">
+            <thead class="bg-gray-100 text-gray-700">
+              <tr>
+                <th class="py-3 px-4 text-left">Date</th>
+                <th class="py-3 px-4 text-left">Type</th>
+                <th class="py-3 px-4 text-left">Category</th>
+                <th class="py-3 px-4 text-left">Amount</th>
+                
+              </tr>
+            </thead>
+            <tbody id="transactionsTable">
+              <tr><td colspan="4" class="text-center text-gray-500 py-3">Loading...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>  lucide.createIcons();</script>
+
+  <script src="./js/dashboard.js"></script>
+</body>
+</html>

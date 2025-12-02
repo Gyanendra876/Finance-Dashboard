@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 relative overflow-x-hidden">
+
+  <!-- Navbar -->
+  <header class="w-full py-5 px-10 flex justify-between items-center bg-white shadow z-20 relative">
+    <h1 class="text-2xl font-bold text-indigo-700">FinanceDash</h1>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="relative flex flex-col md:flex-row items-center justify-between px-10 md:px-20 mt-14 z-10">
+    <!-- Left Text + Get Started -->
+    <div class="md:w-1/2 flex flex-col justify-center z-10">
+      <h2 class="text-4xl md:text-5xl font-extrabold text-gray-800 leading-tight">
+        Manage Your <span class="text-indigo-600">Finances</span> Effortlessly & Smartly
+      </h2>
+      <p class="mt-5 text-gray-600 text-lg">
+        Track expenses, monitor savings, and make smarter financial decisions. Your finances — simplified, visual, and secure.
+      </p>
+      <button id="getStartedBtn" class="mt-6 bg-indigo-600 text-white px-5 py-2.5 rounded-lg text-base font-semibold hover:bg-indigo-700 transition">
+        Get Started
+      </button>
+    </div>
+
+    <!-- Right Hero Image -->
+    <div class="md:w-1/2 mt-10 md:mt-0 relative">
+      <img src="https://img.freepik.com/free-vector/personal-finance-concept-illustration_114360-1530.jpg" 
+           alt="Finance Dashboard Illustration"
+           class="w-full hero-img relative z-10">
+    </div>
+
+    <!-- Decorative Floating Icons -->
+    <img src="https://img.icons8.com/color/96/000000/money.png" class="absolute top-10 right-10 w-12 h-12 animate-bounce opacity-80 z-0">
+    <img src="https://img.icons8.com/color/96/000000/line-chart.png" class="absolute top-32 left-10 w-14 h-14 animate-bounce opacity-70 z-0">
+    <img src="https://img.icons8.com/color/96/000000/safe-box.png" class="absolute bottom-10 right-20 w-16 h-16 animate-bounce opacity-60 z-0">
+  </section>
+
+  <!-- Modal Login/Signup -->
+  <div id="modalOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md relative">
+      <button id="closeModal" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800">&times;</button>
+      <h1 class="text-2xl font-bold text-center mb-6">💸 Finance App</h1>
+
+      <!-- Tabs -->
+      <div class="flex justify-around mb-6">
+        <button id="loginBtn" class="font-semibold text-indigo-600 border-b-2 border-indigo-600 pb-1">Login</button>
+        <button id="signupBtn" class="font-semibold text-gray-400 pb-1">Sign Up</button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm">
+        <input type="email" name="email" placeholder="Email" required class="w-full mb-3 p-2 border rounded-lg">
+        <input type="password" name="password" placeholder="Password" required class="w-full mb-3 p-2 border rounded-lg">
+        <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded-lg mb-3 hover:bg-indigo-700">Login</button>
+      </form>
+
+      <!-- Sign Up Form -->
+      <form id="signupForm" class="hidden">
+        <input type="text" name="name" placeholder="Name" required class="w-full mb-3 p-2 border rounded-lg">
+        <input type="email" name="email" placeholder="Email" required class="w-full mb-3 p-2 border rounded-lg">
+        <input type="password" name="password" placeholder="Password" required class="w-full mb-3 p-2 border rounded-lg">
+        <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-lg mb-3 hover:bg-green-700">Sign Up</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    const API_URL = "http://localhost:4000/api/";
+
+    // POST helper
+    async function postData(endpoint, data) {
+      try {
+        const res = await fetch(API_URL + endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+        const json = await res.json();
+        console.log("POST", endpoint, "response:", json);
+        return json;
+      } catch (err) {
+        console.error("POST Error:", err);
+        return { message: "Network error" };
+      }
+    }
+
+    // Login
+    async function loginUser(email, password) {
+      const res = await postData("auth/login", { email, password });
+      if (res?.token) {
+        localStorage.setItem("token", res.token);
+        window.location.href = "dashboard.html";
+      } else {
+        alert(res?.message || "Login failed");
+      }
+    }
+
+    // Signup
+    async function signupUser(name, email, password) {
+      const res = await postData("auth/register", { name, email, password });
+      if (res?.success) {
+        alert("Account created successfully!");
+        document.getElementById("loginBtn").click();
+      } else {
+        alert(res?.message || "Signup failed");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const getStartedBtn = document.getElementById('getStartedBtn');
+      const modalOverlay = document.getElementById('modalOverlay');
+      const closeModal = document.getElementById('closeModal');
+
+      const loginBtn = document.getElementById('loginBtn');
+      const signupBtn = document.getElementById('signupBtn');
+      const loginForm = document.getElementById('loginForm');
+      const signupForm = document.getElementById('signupForm');
+
+      // Show modal
+      getStartedBtn.addEventListener('click', () => modalOverlay.classList.remove('hidden'));
+      closeModal.addEventListener('click', () => modalOverlay.classList.add('hidden'));
+      modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) modalOverlay.classList.add('hidden'); });
+
+      // Tab switching
+      loginBtn.addEventListener('click', () => {
+        loginForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+        loginBtn.classList.add('text-indigo-600', 'border-b-2', 'border-indigo-600');
+        loginBtn.classList.remove('text-gray-400');
+        signupBtn.classList.remove('text-indigo-600', 'border-b-2', 'border-indigo-600');
+        signupBtn.classList.add('text-gray-400');
+      });
+
+      signupBtn.addEventListener('click', () => {
+        signupForm.classList.remove('hidden');
+        loginForm.classList.add('hidden');
+        signupBtn.classList.add('text-indigo-600', 'border-b-2', 'border-indigo-600');
+        signupBtn.classList.remove('text-gray-400');
+        loginBtn.classList.remove('text-indigo-600', 'border-b-2', 'border-indigo-600');
+        loginBtn.classList.add('text-gray-400');
+      });
+
+      // Handle form submit WITHOUT page reload
+      loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        loginUser(loginForm.email.value, loginForm.password.value);
+      });
+
+      signupForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        signupUser(signupForm.name.value, signupForm.email.value, signupForm.password.value);
+      });
+    });
+  </script>
+
+</body>
+</html>
