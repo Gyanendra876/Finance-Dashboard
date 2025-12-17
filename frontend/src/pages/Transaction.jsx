@@ -4,7 +4,7 @@ import useAuth from "../hooks/useAuth";
 import { postData } from "../services/api";
 
 export default function Transaction() {
-  useAuth(); // Protect route
+  useAuth(); 
 
   const [form, setForm] = useState({
     type: "income",
@@ -17,13 +17,13 @@ export default function Transaction() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
-  // Handle input change
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submit
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

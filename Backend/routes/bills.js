@@ -1,4 +1,4 @@
-// routes/billsRoutes.js
+
 const router = require('express').Router();
 const billsController = require('../controllers/billsController');
 const auth = require('../middleware/auth');

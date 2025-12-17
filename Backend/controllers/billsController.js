@@ -1,4 +1,3 @@
-// controllers/billsController.js
 const Bill = require('../models/Bill');
 exports.getBills=async (req, res) => {
   const bills = await Bill.find({ userId: req.user });
@@ -28,4 +27,3 @@ exports.deleteBill = async (req, res) => {
     res.status(500).json({ msg: 'Server error' });
   }
 };
-// controllers/billsController.js

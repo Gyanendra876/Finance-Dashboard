@@ -23,7 +23,6 @@ export default function PortfolioGrowthChart({ portfolio }) {
     return <p className="text-gray-500">No portfolio data</p>;
   }
 
-  // Create timeline (order by investment date)
   const sorted = [...portfolio].sort(
     (a, b) => new Date(a.createdAt) - new Date(b.createdAt)
   );

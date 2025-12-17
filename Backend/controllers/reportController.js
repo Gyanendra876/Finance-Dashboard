@@ -2,12 +2,10 @@ const Transaction = require('../models/Transaction');
 const { Parser } = require('json2csv');
 require('dotenv').config();
 
-/* ============================================================
-   📌 MAIN REPORTS API (JSON response for frontend charts)
-============================================================ */
+
 exports.getReportsAPI = async (req, res) => {
   try {
-    const userId = req.user.id; // ✅ FIXED
+    const userId = req.user.id; 
 
     const { from, to, category, type } = req.query;
 
@@ -86,9 +84,7 @@ exports.getReportsAPI = async (req, res) => {
   }
 };
 
-/* ============================================================
-   📌 CSV EXPORT (Download detailed report)
-============================================================ */
+
 exports.getDetailedReports = async (req, res) => {
   try {
     const userId = req.user;

@@ -12,13 +12,12 @@ import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
 export default function Dashboard() {
-  useAuth(); // redirect if no token
+  useAuth();
 
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   
 
-  // Fetch dashboard data
   useEffect(() => {
     async function fetchDashboard() {
       try {
@@ -32,11 +31,10 @@ export default function Dashboard() {
     fetchDashboard();
   }, []);
 
-  // Initialize charts
   useEffect(() => {
     if (!data) return;
 
-    // Weekly Spending Chart
+  
     const weeklyCanvas = document.getElementById("weeklySpendingChart");
     if (weeklyCanvas && !weeklyCanvas.chartInstance) {
       const ctx = weeklyCanvas.getContext("2d");
@@ -56,7 +54,6 @@ export default function Dashboard() {
       });
     }
 
-    // Savings Forecast Chart
     const savingsCanvas = document.getElementById("savingsForecastChart");
     if (savingsCanvas && !savingsCanvas.chartInstance) {
       const ctx = savingsCanvas.getContext("2d");

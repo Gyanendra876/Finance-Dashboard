@@ -7,7 +7,6 @@ export default function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Check if user is logged in by token in localStorage
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
@@ -15,21 +14,21 @@ export default function Navbar() {
 
   const handleLogout = async () => {
   try {
-    const token = localStorage.getItem("token"); // get JWT
+    const token = localStorage.getItem("token"); 
 
     const res = await fetch("https://finance-dashboard-3juc.onrender.com/api/auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: "Bearer " + token, // include token
+        Authorization: "Bearer " + token, 
       },
-      credentials: "include", // only needed if using cookies
+      credentials: "include", 
     });
 
     if (res.ok) {
       localStorage.removeItem("token");
       setIsLoggedIn(false);
-      navigate("/"); // redirect to landing page
+      navigate("/"); 
     } else {
       console.error("Logout failed", res.statusText);
     }
@@ -38,7 +37,7 @@ export default function Navbar() {
   }
 };
 
-  // Hide Navbar on landing page
+  
   if (location.pathname === "/") return null;
 
   return (

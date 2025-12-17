@@ -13,7 +13,7 @@ router.post("/", auth, async (req, res) => {
       units,
       investedAmount,
       buyNav,
-      investmentDate, // 👈 NEW
+      investmentDate, 
     } = req.body;
 
     if (!fundName || !buyNav || (!units && !investedAmount)) {
@@ -23,14 +23,13 @@ router.post("/", auth, async (req, res) => {
     }
 
     const portfolio = new Portfolio({
-      userId: req.user.id, // ✅ correct
+      userId: req.user.id, 
       fundName,
       schemeCode,
       units,
       investedAmount,
       buyNav,
 
-      // ✅ KEY CHANGE: use investment date if provided
       createdAt: investmentDate
         ? new Date(investmentDate)
         : new Date(),
@@ -45,7 +44,7 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-// GET portfolio
+
 router.get("/user", auth, async (req, res) => {
   try {
     const { date } = req.query;
@@ -54,7 +53,7 @@ router.get("/user", auth, async (req, res) => {
 
     if (date) {
       query.createdAt = {
-        $lte: new Date(date), // 👈 key line
+        $lte: new Date(date),
       };
     }
 
@@ -70,7 +69,7 @@ router.get("/user", auth, async (req, res) => {
 });
 
 
-// DELETE portfolio item
+
 router.delete("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;

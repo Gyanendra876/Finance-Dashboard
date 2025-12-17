@@ -32,7 +32,7 @@ export default function AddMutualFund({ onAdded }) {
       investmentDate: "",
     });
 
-    onAdded(); // reload portfolio
+    onAdded(); 
   };
 
   return (

@@ -1,4 +1,4 @@
-// Backend/app.js
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -7,9 +7,7 @@ require('dotenv').config();
 
 const app = express();
 
-// --------------------
-// Middleware
-// --------------------
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -29,18 +27,12 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-// --------------------
-// MongoDB connection
-// --------------------
+
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-// --------------------
-// API Routes
-// --------------------
 
-// Portfolio routes
 try {
   const portfolioRoutes = require('./routes/portfolioRoutes');
   app.use('/api/portfolio', portfolioRoutes);
@@ -57,25 +49,19 @@ app.use('/api/nav', require('./routes/navRoutes'));
 app.use('/api/reports', require('./routes/reportRoutes'));
 app.use('/api/bills', require('./routes/bills'));
 
-// --------------------
-// Serve React build
-// --------------------
-const reactBuildPath = path.join(__dirname, '../frontend/dist');
 
+
+const reactBuildPath = path.join(__dirname, '../frontend/dist');
 app.use(express.static(reactBuildPath));
 
-// Fallback for React Router (Express 5+ compatible)
-app.get(/.*/, (req, res) => {
+
+app.get(/^(?!\/api).*/, (req, res) => {
   res.sendFile(path.join(reactBuildPath, 'index.html'));
 });
 
-// --------------------
-// Health check
-// --------------------
+
 app.get('/api', (req, res) => res.json({ msg: 'API Running (JWT)' }));
 
-// --------------------
-// Start server
-// --------------------
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

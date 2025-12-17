@@ -7,7 +7,7 @@ import Chart from "chart.js/auto";
 import AIInsights from "../components/AIInsights";
 
 export default function Reports() {
-  useAuth(); // Protect route
+  useAuth();
 
   const [summary, setSummary] = useState({
     totalIncome: 0,
@@ -20,12 +20,12 @@ export default function Reports() {
   const [editingTx, setEditingTx] = useState(null);
   const [error, setError] = useState("");
 
-  // Canvas refs
+ 
   const categoryRef = useRef(null);
   const expenseIncomeRef = useRef(null);
   const monthlyRef = useRef(null);
 
-  // Chart instances
+
   const categoryChart = useRef(null);
   const expenseIncomeChart = useRef(null);
   const monthlyChart = useRef(null);
@@ -48,7 +48,7 @@ export default function Reports() {
         throw new Error(data?.msg || "Invalid report data");
       }
 
-      // Summary
+  
       setSummary({
         totalIncome: data.totalIncome || 0,
         totalExpense: data.totalExpense || 0,
@@ -59,12 +59,12 @@ export default function Reports() {
 
       setTransactions(data.transactions || []);
 
-      // Destroy old charts if reloading
+    
       categoryChart.current?.destroy();
       expenseIncomeChart.current?.destroy();
       monthlyChart.current?.destroy();
 
-      // Category Chart
+  
       categoryChart.current = new Chart(categoryRef.current, {
         type: "bar",
         data: {
@@ -92,7 +92,7 @@ export default function Reports() {
         },
       });
 
-      // Expense vs Income Chart
+    
       expenseIncomeChart.current = new Chart(expenseIncomeRef.current, {
         type: "bar",
         data: {
@@ -115,7 +115,7 @@ export default function Reports() {
         },
       });
 
-      // Monthly Trend Chart
+    
       monthlyChart.current = new Chart(monthlyRef.current, {
         type: "bar",
         data: {

@@ -1,10 +1,10 @@
 const Transaction = require('../models/Transaction');
 const User = require('../models/user');
 
-// List all transactions
+
 exports.listTransactions = async (req, res) => {
   try {
-    const userId = req.user.id; // <-- use .id
+    const userId = req.user.id;
     const transactions = await Transaction.find({ userId }).sort({ date: -1 }).lean();
     res.json({ transactions });
   } catch (err) {
@@ -13,7 +13,7 @@ exports.listTransactions = async (req, res) => {
   }
 };
 
-// Add a transaction
+
 exports.addTransaction = async (req, res) => {
   try {
     let { type, category, description, amount, date } = req.body;
@@ -23,7 +23,7 @@ exports.addTransaction = async (req, res) => {
       return res.status(400).json({ msg: "Invalid type" });
     }
 
-    const userId = req.user.id; // <-- use .id
+    const userId = req.user.id; 
     if (!userId) return res.status(401).json({ msg: "Unauthorized" });
 
     amount = Number(amount);
@@ -40,7 +40,6 @@ exports.addTransaction = async (req, res) => {
       date
     });
 
-    // Update user balance
     const user = await User.findById(userId);
     if (user) {
       const transactions = await Transaction.find({ userId });
@@ -56,7 +55,7 @@ exports.addTransaction = async (req, res) => {
   }
 };
 
-// Get single transaction
+
 exports.getTransaction = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -69,7 +68,6 @@ exports.getTransaction = async (req, res) => {
   }
 };
 
-// Update transaction
 exports.updateTransaction = async (req, res) => {
   try {
     const { type, category, description, amount } = req.body;
@@ -83,7 +81,6 @@ exports.updateTransaction = async (req, res) => {
 
     if (!tx) return res.status(404).json({ msg: 'Transaction not found' });
 
-    // Recalculate user balance
     const user = await User.findById(userId);
     if (user) {
       const transactions = await Transaction.find({ userId });
@@ -99,14 +96,12 @@ exports.updateTransaction = async (req, res) => {
   }
 };
 
-// Delete transaction
 exports.deleteTransaction = async (req, res) => {
   try {
     const userId = req.user.id;
 
     await Transaction.findOneAndDelete({ _id: req.params.id, userId });
 
-    // Update user balance
     const user = await User.findById(userId);
     if (user) {
       const transactions = await Transaction.find({ userId });

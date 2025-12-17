@@ -1,4 +1,3 @@
-// src/components/AIInsights.jsx
 import { useEffect, useState } from "react";
 
 export default function AIInsights({ transactions }) {
@@ -20,7 +19,6 @@ export default function AIInsights({ transactions }) {
 
     const savings = totalIncome - totalExpense;
 
-    // Category-wise totals
     const categoryTotals = {};
     transactions.forEach((t) => {
       if (t.type === "expense") {
@@ -28,11 +26,9 @@ export default function AIInsights({ transactions }) {
       }
     });
 
-    // Find highest spending categories
     const sortedCategories = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1]);
     const topCategory = sortedCategories[0]?.[0] || "None";
 
-    // Monthly analysis
     const monthlyTotals = {};
     transactions.forEach((t) => {
       const month = new Date(t.date).toLocaleString("default", { month: "short", year: "numeric" });
@@ -42,12 +38,10 @@ export default function AIInsights({ transactions }) {
 
     const insightsArr = [];
 
-    // Overall insights
     insightsArr.push(`📌 Total Income: ₹${totalIncome}`);
     insightsArr.push(`📌 Total Expenses: ₹${totalExpense}`);
     insightsArr.push(`📌 Savings: ₹${savings}`);
 
-    // Savings analysis
     if (savings < 0) {
       insightsArr.push(
         "⚠ You are spending more than you earn. Immediate action needed to reduce expenses."
@@ -60,14 +54,12 @@ export default function AIInsights({ transactions }) {
       insightsArr.push("✅ Your savings are healthy. Keep up the good budgeting!");
     }
 
-    // Top spending category
     if (topCategory) {
       insightsArr.push(
         `💸 You spent the most on "${topCategory}". Consider reviewing this category to save more.`
       );
     }
 
-    // Monthly trends
     const months = Object.keys(monthlyTotals);
     const highExpenseMonth = months.reduce((prev, curr) => {
       return monthlyTotals[curr].expense > monthlyTotals[prev]?.expense ? curr : prev;
@@ -82,14 +74,12 @@ export default function AIInsights({ transactions }) {
     insightsArr.push(`📅 Highest spending month: ${highExpenseMonth}`);
     insightsArr.push(`📅 Lowest savings month: ${lowSavingsMonth}`);
 
-    // Category recommendations
     sortedCategories.slice(0, 3).forEach(([cat, amt], i) => {
       insightsArr.push(
         `💡 Recommendation ${i + 1}: Reduce spending on "${cat}" by ₹${Math.floor(amt * 0.1)} to save more.`
       );
     });
 
-    // Misc tips
     if (transactions.length > 20) {
       insightsArr.push(
         "📌 Tip: You have many transactions. Consider tracking recurring expenses separately for better budgeting."

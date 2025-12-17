@@ -1,13 +1,10 @@
-// routes/navRoutes.js
+
 const express = require("express");
 const router = express.Router();
 const axios = require("axios");
 const ensureAuth = require("../middleware/auth");
 
-// ---------------------------
-// GET LATEST NAV FROM MFAPI
-// /api/nav/latest?code=119551
-// ---------------------------
+
 router.get("/latest", ensureAuth, async (req, res) => {
   try {
     const { code } = req.query;
@@ -44,10 +41,7 @@ router.get("/latest", ensureAuth, async (req, res) => {
 });
 
 
-// ---------------------------
-// GET COMPLETE NAV HISTORY
-// /api/nav/history?code=119551
-// ---------------------------
+
 router.get("/history", ensureAuth, async (req, res) => {
   try {
     const { code } = req.query;

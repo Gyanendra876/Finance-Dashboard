@@ -8,16 +8,15 @@ const User = require('../models/user');
 
 exports.getDashboard = async (req, res) => {
   try {
-    const userId = req.user.id;  // ✅ Fixed
+    const userId = req.user.id;  
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
-    // Recent transactions
     const transactions = await Transaction.find({ userId })
       .sort({ date: -1 })
       .limit(5)
       .lean();
 
-    // Income & Expense totals
+  
     const [totalIncomeRes, totalExpenseRes] = await Promise.all([
       Transaction.aggregate([
         { $match: { userId: userObjectId, type: 'income' } },
@@ -33,22 +32,22 @@ exports.getDashboard = async (req, res) => {
     const totalExpense = totalExpenseRes[0]?.total || 0;
     const balance = totalIncome - totalExpense;
 
-    // Goals, budgets, bills
+  
     const goals = await Goal.find({ userId }).sort({ createdAt: -1 }).limit(5).lean();
     const budgets = await Budget.find({ userId }).sort({ createdAt: -1 }).limit(5).lean();
     const upcomingBills = await Bill.find({ userId, isPaid: false }).sort({ dueDate: 1 }).limit(5).lean();
 
-    // Motivation Quote
+   
     const randomQuote = (await Quote.aggregate([{ $sample: { size: 1 } }]))[0] 
       || { text: "Keep pushing!", author: "AI" };
 
-    // Alerts
+  
     const alerts = [];
     if (totalExpense > totalIncome * 0.8) alerts.push("You're spending more than 80% of your income!");
     if (balance < 0) alerts.push("Your expenses exceed your income!");
     if (goals.some(g => g.progress >= 100)) alerts.push("You achieved a goal!");
 
-    // Weekly Spending (Last 7 Days)
+    
     const today = new Date();
     const startOfWeek = new Date();
     startOfWeek.setDate(today.getDate() - 6);
@@ -69,7 +68,7 @@ exports.getDashboard = async (req, res) => {
       weeklyData[e._id - 1] = e.total;
     });
 
-    // Forecast (Year)
+  
     const currentYear = new Date().getFullYear();
 
     const monthlyIncome = await Transaction.aggregate([
@@ -123,7 +122,7 @@ exports.getDashboard = async (req, res) => {
 };
 
 
-// ADD GOAL
+
 exports.addGoal = async (req, res) => {
   try {
     const { title, targetAmount, savedAmount = 0, deadline } = req.body;
@@ -147,7 +146,7 @@ exports.addGoal = async (req, res) => {
 };
 
 
-// ADD BUDGET
+
 exports.addBudget = async (req, res) => {
   try {
     const { category, limit } = req.body;
@@ -168,7 +167,7 @@ exports.addBudget = async (req, res) => {
 };
 
 
-// DELETE GOAL
+
 exports.deleteGoal = async (req, res) => {
   try {
     await Goal.deleteOne({ _id: req.params.id, userId: req.user });
@@ -180,7 +179,7 @@ exports.deleteGoal = async (req, res) => {
 };
 
 
-// DELETE BUDGET
+
 exports.deleteBudget = async (req, res) => {
   try {
     await Budget.deleteOne({ _id: req.params.id, userId: req.user });
