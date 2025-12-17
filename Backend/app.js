@@ -64,8 +64,8 @@ const reactBuildPath = path.join(__dirname, '../frontend/dist');
 
 app.use(express.static(reactBuildPath));
 
-// Fallback for React Router
-app.get('*', (req, res) => {
+// Fallback for React Router (Express 5+ compatible)
+app.get(/.*/, (req, res) => {
   res.sendFile(path.join(reactBuildPath, 'index.html'));
 });
 
