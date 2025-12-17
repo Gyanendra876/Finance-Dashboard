@@ -7,11 +7,13 @@ const ensureAuth = (req, res, next) => {
 
     token = token.replace('Bearer ', '');
     const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = verified.id;
+
+    // Make req.user an object, not just id
+    req.user = { id: verified.id }; 
     next();
   } catch (err) {
     return res.status(401).json({ msg: 'Token is not valid' });
   }
 };
 
-module.exports = ensureAuth ;
+module.exports = ensureAuth;

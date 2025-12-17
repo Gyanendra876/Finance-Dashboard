@@ -4,7 +4,8 @@ const User = require('../models/user');
 // List all transactions
 exports.listTransactions = async (req, res) => {
   try {
-    const transactions = await Transaction.find({ userId: req.user }).sort({ date: -1 }).lean();
+    const userId = req.user.id; // <-- use .id
+    const transactions = await Transaction.find({ userId }).sort({ date: -1 }).lean();
     res.json({ transactions });
   } catch (err) {
     console.error(err);
@@ -22,22 +23,29 @@ exports.addTransaction = async (req, res) => {
       return res.status(400).json({ msg: "Invalid type" });
     }
 
-    // Ensure req.user exists
-    if (!req.user) return res.status(401).json({ msg: "Unauthorized" });
+    const userId = req.user.id; // <-- use .id
+    if (!userId) return res.status(401).json({ msg: "Unauthorized" });
+
+    amount = Number(amount);
+    if (isNaN(amount)) return res.status(400).json({ msg: "Invalid amount" });
+
+    date = date ? new Date(date) : new Date();
 
     const transaction = await Transaction.create({
-      userId: req.user,
+      userId,
       type,
       category,
       description,
       amount,
-      date: date || Date.now()
+      date
     });
 
     // Update user balance
-    const user = await User.findById(req.user);
+    const user = await User.findById(userId);
     if (user) {
-      user.balance = (user.balance || 0) + (type === "income" ? Number(amount) : -Number(amount));
+      const transactions = await Transaction.find({ userId });
+      const balance = transactions.reduce((acc, t) => acc + (t.type === "income" ? t.amount : -t.amount), 0);
+      user.balance = balance;
       await user.save();
     }
 
@@ -51,7 +59,8 @@ exports.addTransaction = async (req, res) => {
 // Get single transaction
 exports.getTransaction = async (req, res) => {
   try {
-    const tx = await Transaction.findOne({ _id: req.params.id, userId: req.user }).lean();
+    const userId = req.user.id;
+    const tx = await Transaction.findOne({ _id: req.params.id, userId }).lean();
     if (!tx) return res.status(404).json({ msg: 'Transaction not found' });
     res.json({ transaction: tx });
   } catch (err) {
@@ -64,17 +73,20 @@ exports.getTransaction = async (req, res) => {
 exports.updateTransaction = async (req, res) => {
   try {
     const { type, category, description, amount } = req.body;
+    const userId = req.user.id;
+
     const tx = await Transaction.findOneAndUpdate(
-      { _id: req.params.id, userId: req.user },
+      { _id: req.params.id, userId },
       { type, category, description, amount },
       { new: true }
     );
+
     if (!tx) return res.status(404).json({ msg: 'Transaction not found' });
 
-    // Update user balance (recalculate balance is safer)
-    const user = await User.findById(req.user);
+    // Recalculate user balance
+    const user = await User.findById(userId);
     if (user) {
-      const transactions = await Transaction.find({ userId: req.user });
+      const transactions = await Transaction.find({ userId });
       const balance = transactions.reduce((acc, t) => acc + (t.type === "income" ? t.amount : -t.amount), 0);
       user.balance = balance;
       await user.save();
@@ -90,12 +102,14 @@ exports.updateTransaction = async (req, res) => {
 // Delete transaction
 exports.deleteTransaction = async (req, res) => {
   try {
-    await Transaction.findOneAndDelete({ _id: req.params.id, userId: req.user });
+    const userId = req.user.id;
 
-    // Update user balance after deletion
-    const user = await User.findById(req.user);
+    await Transaction.findOneAndDelete({ _id: req.params.id, userId });
+
+    // Update user balance
+    const user = await User.findById(userId);
     if (user) {
-      const transactions = await Transaction.find({ userId: req.user });
+      const transactions = await Transaction.find({ userId });
       const balance = transactions.reduce((acc, t) => acc + (t.type === "income" ? t.amount : -t.amount), 0);
       user.balance = balance;
       await user.save();

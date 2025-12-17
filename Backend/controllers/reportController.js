@@ -7,13 +7,10 @@ require('dotenv').config();
 ============================================================ */
 exports.getReportsAPI = async (req, res) => {
   try {
-    const userId = req.user; // userId from auth middleware
+    const userId = req.user.id; // ✅ FIXED
 
     const { from, to, category, type } = req.query;
 
-    // ───────────────────────────────────────────────
-    // 1️⃣ FILTER BUILDING
-    // ───────────────────────────────────────────────
     let filter = { userId };
 
     if (from && to) {
@@ -22,16 +19,12 @@ exports.getReportsAPI = async (req, res) => {
     if (category) filter.category = category;
     if (type) filter.type = type;
 
-    // Fetch all transaction records
     const transactions = await Transaction.find(filter)
       .sort({ date: -1 })
       .lean();
 
     const categories = await Transaction.distinct('category', { userId });
 
-    // ───────────────────────────────────────────────
-    // 2️⃣ TOTALS
-    // ───────────────────────────────────────────────
     const totalIncome = transactions
       .filter(t => t.type === 'income')
       .reduce((s, t) => s + t.amount, 0);
@@ -47,28 +40,18 @@ exports.getReportsAPI = async (req, res) => {
         .filter(t => t.type === 'expense')
         .sort((a, b) => b.amount - a.amount)[0] || { category: 'N/A', amount: 0 };
 
-    // ───────────────────────────────────────────────
-    // 3️⃣ FIXED MONTHLY AGGREGATION (WORKS PERFECTLY)
-    // ───────────────────────────────────────────────
     const monthMap = {};
-
     transactions.forEach(t => {
       const d = new Date(t.date);
-
-      // Key used only for sorting (safe)
       const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-
-      // Label for frontend chart
       const label = d.toLocaleString("default", { month: "short", year: "numeric" });
 
       if (!monthMap[key]) {
         monthMap[key] = { income: 0, expense: 0, label };
       }
-
       monthMap[key][t.type] += t.amount;
     });
 
-    // Sort keys chronologically
     const sortedKeys = Object.keys(monthMap).sort();
 
     const monthlyData = {
@@ -77,9 +60,6 @@ exports.getReportsAPI = async (req, res) => {
       expense: sortedKeys.map(k => monthMap[k].expense)
     };
 
-    // ───────────────────────────────────────────────
-    // 4️⃣ CATEGORY WISE TOTALS FOR PIE CHART
-    // ───────────────────────────────────────────────
     const categoryTotals = {};
     transactions
       .filter(t => t.type === "expense")
@@ -88,12 +68,6 @@ exports.getReportsAPI = async (req, res) => {
           (categoryTotals[t.category] || 0) + t.amount;
       });
 
-    // Placeholder AI insights
-    const aiInsights = "AI insights unavailable.";
-
-    // ───────────────────────────────────────────────
-    // 5️⃣ SEND FINAL RESPONSE
-    // ───────────────────────────────────────────────
     return res.json({
       transactions,
       categories,
@@ -103,7 +77,7 @@ exports.getReportsAPI = async (req, res) => {
       biggestExpense,
       monthlyData,
       categoryTotals,
-      aiReport: aiInsights
+      aiReport: "AI insights unavailable."
     });
 
   } catch (err) {

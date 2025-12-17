@@ -8,7 +8,7 @@ const User = require('../models/user');
 
 exports.getDashboard = async (req, res) => {
   try {
-    const userId = req.user;
+    const userId = req.user.id;  // ✅ Fixed
     const userObjectId = new mongoose.Types.ObjectId(userId);
 
     // Recent transactions
