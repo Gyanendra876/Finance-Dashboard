@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import AddMutualFund from "../components/AddMutualFund";
 import PortfolioTable from "../components/PortfolioTable";
 import PortfolioSummary from "../components/PortfolioSummary";
-import PortfolioChart from "../components/PortfolioChart";
+import PortfolioChart from "../components/Portfoliochart";
 import MutualFundList from "../components/MutualFundList";
 import { getPortfolioWithCurrentNav } from "../services/api"; // updated import
 import useAuth from "../hooks/useAuth";
