@@ -1,126 +1,157 @@
-Financial Dashboard
+📊 Finance Dashboard (Full Stack)
 
-A modern Finance Dashboard web application to track income, expenses, bills, and financial goals with Google authentication support.
+A full-stack personal finance dashboard that helps users track transactions, analyze reports, and manage a mutual fund portfolio with real-time insights.
 
-Live Demo
+Built using React, Node.js, Express, and MongoDB.
 
-Features
+🚀 Features
+🔐 Authentication
 
-Track income and expenses in real-time
+User registration & login
 
-Add bills and receive reminders
+JWT-based authentication
 
-Goals tracker and budget limits visualization
+Protected routes
 
-Smart alerts for overspending or upcoming bills
+📊 Dashboard
 
-Google OAuth login for secure authentication
+Overview of total investment
 
-Export detailed transaction summaries in CSV format
+Profit / loss summary
 
-Automated scheduled tasks with node-cron
+Portfolio performance snapshot
 
-Technologies Used
+🧾 Transactions
 
-Backend: Node.js, Express
+Add income and expense transactions
 
-Frontend: EJS templating, Tailwind CSS
+Categorize transactions
 
-Database: MongoDB & Mongoose
+View transaction history
 
-Authentication: Passport.js (Local + Google OAuth 2.0)
+📈 Reports
 
-Other Libraries:
+Date-wise financial reports
 
-bcryptjs (password hashing)
+Investment performance analysis
 
-jsonwebtoken (JWT handling)
+Profit & loss calculations
 
-dotenv (environment variables)
+Charts and visual insights
 
-csvtojson & json2csv (CSV export/import)
+💼 My Portfolio (Mutual Funds)
 
-nodemailer (email notifications)
+Add mutual fund investments
 
-node-cron (scheduled tasks)
+View different mutual funds
 
-OpenAI & Google Generative AI APIs (optional features)
+Track units, invested amount & current value
 
-Installation
+Portfolio-level profit / loss
 
-Clone the repository:
+Scheme-wise performance
 
-git clone https://github.com/Gyanendra876/Finance-Dashboard.git
-cd Finance-Dashboard
+🌐 Live Demo (Deployed on Render)
+
+👉 Frontend:
+
+https://finance-dashboard-frontend-e8um.onrender.com
 
 
-Install dependencies:
+👉 Backend API:
 
+https://finance-dashboard-3juc.onrender.com
+
+
+⚠️ Note: The app may take a few seconds to load initially because Render free instances spin down when idle.
+
+
+🛠️ Tech Stack
+Frontend
+
+React
+
+React Router
+
+Chart.js
+
+Tailwind CSS / CSS
+
+Fetch API
+
+Backend
+
+Node.js
+
+Express.js
+
+JWT Authentication
+
+REST APIs
+
+Database
+
+MongoDB
+
+Mongoose
+
+📁 Project Structure
+finance-dashboard/
+│
+├── frontend/
+├── backend/
+├── screenshots/
+│   ├── login.png
+│   ├── dashboard.png
+│   ├── add-transaction.png
+│   ├── reports.png
+│   └── portfolio.png
+│
+└── README.md
+
+⚙️ Installation & Setup
+1️⃣ Clone the repository
+git clone https://github.com/your-username/finance-dashboard.git
+cd finance-dashboard
+
+2️⃣ Backend Setup
+cd backend
 npm install
 
 
-Create a .env file in the project root and add the following environment variables:
+Create .env file:
 
-PORT=3000
-DB_URL=your_mongodb_connection_string
-GOOGLE_CLIENT_ID=your_google_client_id
-GOOGLE_CLIENT_SECRET=your_google_client_secret
-JWT_SECRET=your_jwt_secret
-EMAIL_USER=your_email_for_notifications
-EMAIL_PASS=your_email_password
+PORT=4000
+MONGO_URI=your_mongodb_connection_string
+JWT_SECRET=your_secret_key
 
 
-Start the server:
+Run backend:
 
 npm start
 
+3️⃣ Frontend Setup
+cd frontend
+npm install
+npm run dev
 
-Open your browser at:
+🚧 Future Improvements
 
-http://localhost:3000
+Live NAV integration for mutual funds
 
-Deployment
+Export reports as PDF/Excel
 
-The project is deployed on Render
-:
+Advanced analytics & filters
 
-Live Demo: https://finance-dashboard-frontend-e8um.onrender.com
+Mobile responsiveness
 
- Login Credential:
- email-harshsinha06y@gmail.com
- password-Harsh@123
+Dark mode
 
-Render automatically pulls updates from GitHub for continuous deployment.
-
-Make sure all .env variables are configured in Render’s Environment settings for production.
-
-Usage
-
-Register/login with your Google account or local credentials
-
-Add income, expenses, and bills
-
-Track goals and budget limits
-
-Download transaction summaries in CSV format
-Contributing
-
-Fork the repository
-
-Create a feature branch: git checkout -b feature-name
-
-Commit your changes: git commit -m "Add feature"
-
-Push to the branch: git push origin feature-name
-
-Create a Pull Request
-
-License
-
-This project is licensed under the ISC License.
-
-Author
+👨‍💻 Author
 
 Gyanendra Sinha
+Full Stack Developer
 
-Email: harshsinha06y@gmail.com
+⭐ Support
+
+If you like this project, please give it a ⭐ on GitHub!
