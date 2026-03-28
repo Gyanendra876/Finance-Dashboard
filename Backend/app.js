@@ -55,6 +55,9 @@ app.use(express.static(buildPath, {
     else if (filePath.endsWith('.json')) res.setHeader('Content-Type', 'application/json');
   }
 }));
+app.get('/ping', (req, res) => {
+  res.send("ok");
+});
 
 // React Router fallback
 app.get(/^(?!\/api).*/, (req, res) => {
