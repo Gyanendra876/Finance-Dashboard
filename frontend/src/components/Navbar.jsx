@@ -16,7 +16,7 @@ export default function Navbar() {
   try {
     const token = localStorage.getItem("token"); 
 
-    const res = await fetch("https://finance-dashboard-3juc.onrender.com/api/auth/logout", {
+    const res = await fetch("finance-dashboard-production-11c9.up.railway.app/api/auth/logout", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
