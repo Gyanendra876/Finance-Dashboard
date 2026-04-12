@@ -1,4 +1,4 @@
-const API_URL = "https://finance-dashboard-3juc.onrender.com/api";
+const API_URL = "finance-dashboard-production-11c9.up.railway.app/api";
 
 // token header helper
 export const getTokenHeader = () => {

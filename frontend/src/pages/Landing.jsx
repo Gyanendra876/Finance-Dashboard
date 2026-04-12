@@ -19,7 +19,7 @@ export default function Landing() {
     e.preventDefault();
     setError("");
     setLoading(true);
-
+ 
     try {
       const endpoint = isLogin ? "auth/login" : "auth/register";
       const payload = isLogin
@@ -32,7 +32,6 @@ export default function Landing() {
         setError(res.message || "Something went wrong");
         return;
       }
-
       localStorage.setItem("token", res.token);
       navigate("/dashboard");
 
