@@ -7,30 +7,25 @@ const app = express();
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); // CORS setup 
 const FRONTEND_URL = process.env.FRONTEND_URL; 
-const cors = require("cors");
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://finance-dashboard-frontend-e8um.onrender.com"
-];
-
+// ✅ Put this BEFORE routes
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps, curl)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    } else {
-      return callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: "https://finance-dashboard-frontend-e8um.onrender.com",
   credentials: true
 }));
 
-// ✅ VERY IMPORTANT (handles preflight)
-app.options("*", cors());
-// MongoDB 
+// ✅ VERY IMPORTANT: handle preflight manually
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "https://finance-dashboard-frontend-e8um.onrender.com");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});// MongoDB 
 mongoose.connect(process.env.MONGO_URI) .then(() => console.log('MongoDB connected')) .catch(err => console.log(err)); 
 // API routes 
 try{ 
