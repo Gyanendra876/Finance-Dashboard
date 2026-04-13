@@ -64,8 +64,13 @@ app.get('/api', (req, res) => {
 });
 
 // ================= SERVER =================
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT;
 
-app.listen(PORT, "0.0.0.0", () => {
+if (!PORT) {
+  console.error("PORT not defined ❌");
+  process.exit(1);
+}
+
+app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
