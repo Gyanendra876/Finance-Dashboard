@@ -9,7 +9,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ================= CORS (FINAL FIX) =================
+// ================= CORS FIX =================
 const allowedOrigin = "https://finance-dashboard-frontend-e8um.onrender.com";
 
 app.use((req, res, next) => {
@@ -33,7 +33,7 @@ app.use(cors({
 // ================= MONGODB =================
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log(err));
+  .catch(err => console.error("Mongo Error:", err));
 
 // ================= ROUTES =================
 try {
@@ -56,7 +56,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/ping', (req, res) => {
-  res.send("ok");
+  res.send('ok');
 });
 
 app.get('/api', (req, res) => {
