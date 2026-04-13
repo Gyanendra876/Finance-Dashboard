@@ -34,6 +34,8 @@ app.use(express.static(buildPath, { setHeaders: (res, filePath) => { if (filePat
   app.get('/ping', (req, res) => { res.send("ok"); }); // React Router fallback 
   app.get(/^(?!\/api).*/, (req, res) => { res.sendFile(path.join(buildPath, 'index.html')); }); 
   app.get('/api', (req, res) => res.json({ msg: 'API Running (JWT)' })); 
-  const PORT = process.env.PORT || 5000; 
-  app.listen(PORT, () => 
-    console.log(`Server running on http://localhost:${PORT}`));
+  const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Server running on port ${PORT}`);
+});
