@@ -1,4 +1,4 @@
-📊 Finance Dashboard (Full Stack)
+ Finance Dashboard (Full Stack)
 
 A full-stack personal finance dashboard that helps users track transactions, analyze reports, and manage a mutual fund portfolio with real-time insights.
 
